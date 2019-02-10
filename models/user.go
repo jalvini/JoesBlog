@@ -4,6 +4,7 @@ import (
 	"Site1/database"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/securecookie"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )
@@ -16,7 +17,9 @@ type User struct {
 	LastName  string `json:"lastname"`
 }
 
-type M map[string]interface{}
+var cookieHandler = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32))
 
 func UserGuard(username string, password string) bool {
 	var user User
@@ -31,14 +34,9 @@ func UserGuard(username string, password string) bool {
 		panic(err.Error())
 	}
 
+	fmt.Println("Joe")
 	pwdMatch := comparePasswords(user.Password, pwd)
 
-	/*
-		Start Of Password Match o Create Session
-		if (pwdMatch == true){
-
-		}
-	*/
 	return pwdMatch
 }
 

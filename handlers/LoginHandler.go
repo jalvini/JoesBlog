@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"Site1/helpers"
 	"Site1/models"
 	"fmt"
 	"html/template"
@@ -24,6 +25,17 @@ func LoginPostHandler(write http.ResponseWriter, request *http.Request) {
 	password := request.Form.Get("password")
 
 	loginCheck := models.UserGuard(username, password)
+
+	redirectTarget := "/login"
+
+	if loginCheck == true {
+		helpers.SetCookie(username, write)
+		//redirectTarget = "/index"
+	} else {
+		redirectTarget = "/register"
+	}
+
+	http.Redirect(write, request, redirectTarget, 302)
 
 	fmt.Fprintln(write, bool(bool(loginCheck)))
 }
