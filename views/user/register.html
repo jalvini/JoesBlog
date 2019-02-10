@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
+{{template "header.html"}}
+{{.}}
 <form action="/register" method="post">
     Username:<label>
         <input type="text" name="username">
@@ -22,5 +24,6 @@
 
     <input type="submit" value="Register">
 </form>
+{{template "footer.html"}}
 </body>
 </html>

@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	router := NewRouter()
+	r := NewRouter()
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8000", r))
 }

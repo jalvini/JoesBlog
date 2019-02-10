@@ -8,7 +8,7 @@ import (
 )
 
 func LoginHandler(write http.ResponseWriter, request *http.Request) {
-	template, err := template.ParseFiles("views/user/login.html", "views/shared/header.html")
+	template, err := template.ParseFiles("views/user/login.html", "views/shared/header.html", "views/shared/footer.html")
 
 	if err != nil {
 		fmt.Println(write, "Failed To Load Template")
