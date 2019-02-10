@@ -2,18 +2,25 @@ package handlers
 
 import (
 	"Site1/models"
+	"fmt"
 	"html/template"
 	"net/http"
 )
 
 func RegisterHandler(write http.ResponseWriter, request *http.Request) {
-	template, err := template.ParseFiles("views/user/register.html", "views/shared/header.html", "views/shared/footer.html")
+	write.Header().Set("Content-Type", "text/html")
+
+	template, err := template.ParseFiles("views/user/register.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
 
 	if err != nil {
+		fmt.Println(write, "Failed To Load Template")
 		panic(err.Error())
 	}
 
-	template.Execute(write, "")
+	tempErr := template.Execute(write, "John Smith")
+	if tempErr != nil {
+		http.Error(write, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func RegisterPostHandler(write http.ResponseWriter, request *http.Request) {
@@ -26,7 +33,7 @@ func RegisterPostHandler(write http.ResponseWriter, request *http.Request) {
 	firstName := request.Form.Get("first_name")
 	lastName := request.Form.Get("last_name")
 
-	registerTemplate, err := template.ParseFiles("views/user/register.html", "views/shared/header.html", "views/shared/footer.html")
+	registerTemplate, err := template.ParseFiles("views/user/register.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
 
 	if err != nil {
 		panic(err.Error())

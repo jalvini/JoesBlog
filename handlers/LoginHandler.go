@@ -9,14 +9,19 @@ import (
 )
 
 func LoginHandler(write http.ResponseWriter, request *http.Request) {
-	template, err := template.ParseFiles("views/user/login.html", "views/shared/header.html", "views/shared/footer.html")
+	write.Header().Set("Content-Type", "text/html")
+
+	template, err := template.ParseFiles("views/user/login.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
 
 	if err != nil {
 		fmt.Println(write, "Failed To Load Template")
 		panic(err.Error())
 	}
 
-	template.Execute(write, "This is a template")
+	tempErr := template.Execute(write, "John Smith")
+	if tempErr != nil {
+		http.Error(write, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func LoginPostHandler(write http.ResponseWriter, request *http.Request) {
