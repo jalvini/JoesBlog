@@ -16,6 +16,8 @@ type User struct {
 	LastName  string `json:"lastname"`
 }
 
+type M map[string]interface{}
+
 func UserGuard(username string, password string) bool {
 	var user User
 	db := database.DbInit()
@@ -31,6 +33,12 @@ func UserGuard(username string, password string) bool {
 
 	pwdMatch := comparePasswords(user.Password, pwd)
 
+	/*
+		Start Of Password Match o Create Session
+		if (pwdMatch == true){
+
+		}
+	*/
 	return pwdMatch
 }
 
