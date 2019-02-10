@@ -9,6 +9,13 @@ import (
 )
 
 func LoginHandler(write http.ResponseWriter, request *http.Request) {
+	checkUser := helpers.GetUserCookie(request)
+
+	if len(checkUser) >= 1 {
+		redirectTarget := "/dashboard"
+		http.Redirect(write, request, redirectTarget, 302)
+	}
+
 	write.Header().Set("Content-Type", "text/html")
 
 	template, err := template.ParseFiles("views/user/login.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
@@ -34,7 +41,7 @@ func LoginPostHandler(write http.ResponseWriter, request *http.Request) {
 	redirectTarget := "/login"
 
 	if loginCheck == true {
-		helpers.SetCookie(username, write)
+		helpers.SetUserCookie(username, write)
 		//redirectTarget = "/index"
 	} else {
 		redirectTarget = "/register"

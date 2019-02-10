@@ -34,7 +34,6 @@ func UserGuard(username string, password string) bool {
 		panic(err.Error())
 	}
 
-	fmt.Println("Joe")
 	pwdMatch := comparePasswords(user.Password, pwd)
 
 	return pwdMatch
