@@ -1,23 +1,27 @@
 package handlers
 
 import (
+	"Site1/helpers"
+	"Site1/models"
 	"fmt"
-	"html/template"
 	"net/http"
 )
 
 func IndexHandler(write http.ResponseWriter, request *http.Request) {
-	write.Header().Set("Content-Type", "text/html")
+	user := helpers.GetUserCookie(request)
+	userData := models.User{}
 
-	template, err := template.ParseFiles("views/index.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
-
-	if err != nil {
-		fmt.Println(write, "Failed To Load Template")
-		panic(err.Error())
+	if len(user) > 0 {
+		userData = models.ShowUser(user)
+		fmt.Println("This Works")
 	}
 
-	tempErr := template.Execute(write, "John Smith")
-	if tempErr != nil {
+	fmt.Println(userData)
+
+	write.Header().Set("Content-Type", "text/html")
+
+	err := helpers.Template.ExecuteTemplate(write, "index.gohtml", "Joe")
+	if err != nil {
 		http.Error(write, err.Error(), http.StatusInternalServerError)
 	}
 }

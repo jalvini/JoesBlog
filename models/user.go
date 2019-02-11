@@ -28,7 +28,7 @@ func UserGuard(username string, password string) bool {
 
 	defer db.Close()
 
-	err := db.QueryRow("SELECT id, username, password, first_name, last_name FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.Password, &user.FirstName, &user.LastName)
+	err := db.QueryRow("SELECT id, username, password FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.Password)
 
 	if err != nil {
 		panic(err.Error())
@@ -37,6 +37,22 @@ func UserGuard(username string, password string) bool {
 	pwdMatch := comparePasswords(user.Password, pwd)
 
 	return pwdMatch
+}
+
+func ShowUser(username string) User {
+	var user User
+	db := database.DbInit()
+
+	defer db.Close()
+
+	err := db.QueryRow("SELECT id, username, password, first_name, last_name FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.Password, &user.FirstName, &user.LastName)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println(user)
+	return user
 }
 
 func CreateUser(username string, password string, firstName string, lastName string) string {

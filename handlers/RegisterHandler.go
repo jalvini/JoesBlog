@@ -1,24 +1,24 @@
 package handlers
 
 import (
+	"Site1/helpers"
 	"Site1/models"
-	"fmt"
 	"html/template"
 	"net/http"
 )
 
 func RegisterHandler(write http.ResponseWriter, request *http.Request) {
-	write.Header().Set("Content-Type", "text/html")
+	checkUser := helpers.GetUserCookie(request)
 
-	template, err := template.ParseFiles("views/user/register.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
-
-	if err != nil {
-		fmt.Println(write, "Failed To Load Template")
-		panic(err.Error())
+	if len(checkUser) > 0 {
+		redirectTarget := "/dashboard"
+		http.Redirect(write, request, redirectTarget, 302)
 	}
 
-	tempErr := template.Execute(write, "John Smith")
-	if tempErr != nil {
+	write.Header().Set("Content-Type", "text/html")
+
+	err := helpers.Template.ExecuteTemplate(write, "register.gohtml", "John Smith")
+	if err != nil {
 		http.Error(write, err.Error(), http.StatusInternalServerError)
 	}
 }

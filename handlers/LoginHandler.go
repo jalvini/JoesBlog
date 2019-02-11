@@ -4,29 +4,21 @@ import (
 	"Site1/helpers"
 	"Site1/models"
 	"fmt"
-	"html/template"
 	"net/http"
 )
 
 func LoginHandler(write http.ResponseWriter, request *http.Request) {
 	checkUser := helpers.GetUserCookie(request)
 
-	if len(checkUser) >= 1 {
+	if len(checkUser) > 0 {
 		redirectTarget := "/dashboard"
 		http.Redirect(write, request, redirectTarget, 302)
 	}
 
 	write.Header().Set("Content-Type", "text/html")
 
-	template, err := template.ParseFiles("views/user/login.gohtml", "views/shared/header.gohtml", "views/shared/footer.gohtml")
-
+	err := helpers.Template.ExecuteTemplate(write, "login.gohtml", "John Smith")
 	if err != nil {
-		fmt.Println(write, "Failed To Load Template")
-		panic(err.Error())
-	}
-
-	tempErr := template.Execute(write, "John Smith")
-	if tempErr != nil {
 		http.Error(write, err.Error(), http.StatusInternalServerError)
 	}
 }
