@@ -2,11 +2,10 @@ package models
 
 import (
 	"Site1/database"
+	"Site1/helpers"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/securecookie"
-	"golang.org/x/crypto/bcrypt"
-	"log"
 )
 
 type User struct {
@@ -24,7 +23,7 @@ var cookieHandler = securecookie.New(
 func UserGuard(username string, password string) bool {
 	var user User
 	db := database.DbInit()
-	pwd := getPwd(password)
+	pwd := helpers.GetPwd(password)
 
 	defer db.Close()
 
@@ -34,7 +33,7 @@ func UserGuard(username string, password string) bool {
 		return false
 	}
 
-	pwdMatch := comparePasswords(user.Password, pwd)
+	pwdMatch := helpers.ComparePasswords(user.Password, pwd)
 
 	return pwdMatch
 }
@@ -58,8 +57,8 @@ func ShowUser(username string) User {
 func CreateUser(username string, password string, firstName string, lastName string) string {
 	db := database.DbInit()
 
-	pwd := getPwd(password)
-	hash := hashAndSalt(pwd)
+	pwd := helpers.GetPwd(password)
+	hash := helpers.HashAndSalt(pwd)
 
 	insert, err := db.Query("INSERT INTO users VALUES (?, ?, ?, ?, ? )", nil, username, hash, firstName, lastName)
 
@@ -70,32 +69,4 @@ func CreateUser(username string, password string, firstName string, lastName str
 	defer insert.Close()
 
 	return "User Created Successfully"
-}
-
-func getPwd(pwd string) []byte {
-	_, err := fmt.Scan(pwd)
-	if err != nil {
-		log.Println(err)
-	}
-
-	return []byte(pwd)
-}
-
-func hashAndSalt(pwd []byte) string {
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-	}
-	return string(hash)
-}
-
-func comparePasswords(hashedPwd string, plainPwd []byte) bool {
-	byteHash := []byte(hashedPwd)
-	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-
-	return true
 }
