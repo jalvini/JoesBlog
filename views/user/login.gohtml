@@ -6,7 +6,10 @@
 </head>
 <body>
 {{template "header.gohtml"}}
-<h1>Index Template</h1>
+
+{{if .MessageTitle}}
+    <span>{{.MessageTitle}}</span>
+{{end}}
 
 <form action="/login" method="post">
     Username:<label>

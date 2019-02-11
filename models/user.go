@@ -31,7 +31,7 @@ func UserGuard(username string, password string) bool {
 	err := db.QueryRow("SELECT id, username, password FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.Password)
 
 	if err != nil {
-		panic(err.Error())
+		return false
 	}
 
 	pwdMatch := comparePasswords(user.Password, pwd)
