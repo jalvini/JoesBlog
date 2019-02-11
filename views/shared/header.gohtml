@@ -35,7 +35,27 @@
         <div class="userinfo">
             <div class="user">
                 <ul>
-                    <li><a href="#"><img src="images/user-pic.png" title="user-name" /><span>{{.}}</span></a></li>
+                    <li>
+                        {{if .FirstName}}
+                            <a href="{{.Username}}"><img src="images/user-pic.png" title="{{.FirstName}} {{.LastName}}" />
+                                <span>
+                                    {{.FirstName}}
+                                </span>
+                            </a>
+                        {{else}}
+                            <a href="login/">
+                                <span>
+                                    Login
+                                </span>
+                            </a>
+
+                            <a href="register/">
+                                <span>
+                                    Register
+                                </span>
+                            </a>
+                        {{end}}
+                    </li>
                 </ul>
             </div>
         </div>

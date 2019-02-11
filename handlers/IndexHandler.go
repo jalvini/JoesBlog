@@ -20,7 +20,7 @@ func IndexHandler(write http.ResponseWriter, request *http.Request) {
 
 	write.Header().Set("Content-Type", "text/html")
 
-	err := helpers.Template.ExecuteTemplate(write, "index.gohtml", "Joe")
+	err := helpers.Template.ExecuteTemplate(write, "index.gohtml", userData)
 	if err != nil {
 		http.Error(write, err.Error(), http.StatusInternalServerError)
 	}
