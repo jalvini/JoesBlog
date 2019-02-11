@@ -3,7 +3,6 @@ package models
 import (
 	"Site1/database"
 	"Site1/helpers"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/securecookie"
 )
@@ -50,7 +49,6 @@ func ShowUser(username string) User {
 		panic(err.Error())
 	}
 
-	fmt.Println(user)
 	return user
 }
 
